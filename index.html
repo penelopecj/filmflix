@@ -224,7 +224,7 @@
             //1. access the user input from input tag
             var movieInput = document.querySelector("#user-input")
             //2. send a request behind the scenes to OMDBAPI 
-            var url = "http://www.omdbapi.com/?s=" + movieInput.value + "&apikey=2f6435d9"
+            var url = "https://www.omdbapi.com/?s=" + movieInput.value + "&apikey=2f6435d9"
             // axios library function, special syntax
             axios.get(url).then(function(response) {
                 //array called movies
