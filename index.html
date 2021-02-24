@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie App</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            background-color: rgb(33, 30, 49);
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        main {
+            width: 80%;
+            margin: 0 auto;
+        }
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+        }
+        h1 {
+            color: rgb(219, 219, 231);
+            font-family: 'Cookie', cursive;
+            font-size: 4rem;
+            letter-spacing: 0.25rem;
+            animation-name: change;
+            animation-duration: 10s;
+            animation-fill-mode: forwards;
+            animation-iteration-count: infinite;
+        }
+        @keyframes change {
+            0% {
+                filter: drop-shadow(5px 5px 3px plum);
+            }
+
+            20% {
+                filter: drop-shadow(5px 5px 3px purple);
+            }
+            
+            30% {
+                filter: drop-shadow(5px 5px 3px rebeccapurple);
+            }
+
+            40% {
+                filter: drop-shadow(5px 5px 3px navy);
+            }
+
+            50% {
+                filter: drop-shadow(5px 5px 3px rgb(4, 103, 196));
+            }
+
+            60% {
+                filter: drop-shadow(5px 5px 3px navy);
+            }
+
+            70% {
+                filter: drop-shadow(5px 5px 3px rebeccapurple);
+            }
+
+            80% {
+                filter: drop-shadow(5px 5px 3px purple);
+            }
+
+            100% {
+                filter: drop-shadow(5px 5px 3px plum);
+            }
+        }
+        h2 {
+            color: plum;
+        }
+        form {
+            display: flex;
+        }
+        input, button {
+            font-size: 1.5rem;
+            padding: 0.5rem;
+            background-color: black;
+            border: 0;
+            outline: none;
+            color: white;
+        }
+        input {
+            border-left: 4px solid rgb(219, 219, 231);
+            transition-duration: 0.7s;
+            border-bottom: 4px solid black;    
+            animation-name: grow; 
+            animation-duration: 2s;
+            animation-fill-mode: forwards; 
+        }
+        input:hover {
+            border-bottom: 4px solid rgb(219, 219, 231);
+            border-radius: 0 0 0 5px;
+        }
+        input:focus {
+            background-color: rgb(219, 219, 231);
+            border-radius: 5px 0 0 5px;
+            border-bottom: 4px solid rgb(219, 219, 231);
+            color: black;
+        }
+        @keyframes grow {
+            from {
+                width: 0;
+            }
+
+            to {
+                width: 30vw;
+            }
+        }
+        button {
+            border-radius: 0 5px 5px 0;
+            transition-duration: 0.5s;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: rgb(204, 32, 133);
+        }
+        ul {
+            display: flex;
+            flex-wrap: wrap;
+            padding-left: 0;
+        }
+        li {
+            color:rgb(219, 219, 231);
+            list-style-type: none;
+        }
+        img {
+            width: 150px;
+            height: 225px;
+            object-fit: cover;
+        }
+        .menu {
+            display: none;
+        }
+        nav ul {
+            display: none;
+        }
+        @media only screen and (max-width: 768px) {
+            body {
+               
+            }
+        }
+        @media only screen and (max-width: 375px) {
+            header {
+                flex-direction: column;
+            }
+            .menu {
+                color: white;
+                font-size: 3.2rem;
+                display: block;
+                padding: 1rem;
+            }
+            nav {
+                align-self: flex-start;
+            }
+            .display-menu {
+                display: flex;
+                flex-direction: column;
+                padding: 0 1rem;
+                width: 80vw;
+                margin: 0 auto;
+                
+            }
+            .display-menu li {
+                padding: .5rem;
+                border: 1px solid white;
+                width: 100%;
+            }
+            input, button {
+                font-size: 1.2rem;
+            }
+        }
+    </style>     
+
+
+    </script>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <span class="material-icons menu">
+                menu
+            </span>
+            <ul>
+                <li>Home</li>
+                <li>Saved Movies</li>
+                <li>Conact</li>
+            </ul>
+        </nav>
+        <h1>Filmflix</h1>
+        <form action="">
+            <input id="user-input" type="text" placeholder="Movie name" name="s">
+            <button>Search</button>
+        </form>
+    </header>
+    <main>
+        <h2></h2>
+        <ul class="movies">
+        </ul>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script>
+        var menuIcon = document.querySelector(".menu")
+        menuIcon.addEventListener("click", function() {
+            var navList = document.querySelector("nav ul")
+            navList.classList.toggle("display-menu")
+        })
+
+
+
+        var movieList = document.querySelector(".movies")
+        var searchBtn = document.querySelector("button")
+        var h2 = document.querySelector("h2")
+
+        searchBtn.addEventListener("click", function(event) {
+            event.preventDefault()
+            movieList.innerHTML = ""
+            h2.textContent = "Related Titles"
+            //1. access the user input from input tag
+            var movieInput = document.querySelector("#user-input")
+            //2. send a request behind the scenes to OMDBAPI 
+            var url = "http://www.omdbapi.com/?s=" + movieInput.value + "&apikey=2f6435d9"
+            // axios library function, special syntax
+            axios.get(url).then(function(response) {
+                //array called movies
+                var movies = response.data.Search
+                for (var i = 0; i < movies.length; i++) {
+                    movieList.innerHTML += `<li><img src="${movies[i].Poster}"></li>`
+                }
+            })
+        })
+     
+    </script>
+
+</body>
+
+</html>
